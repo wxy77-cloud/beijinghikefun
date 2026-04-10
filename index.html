@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>北京徒个乐 - 探索城市周边的自然美景</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="icon" href="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=hiking%20icon%20purple%20color&image_size=square">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <header>
+        <nav>
+            <a href="index.html" class="logo">北京徒个乐</a>
+            <ul class="nav-links">
+                <li><a href="index.html">首页</a></li>
+                <li><a href="routes.html">路线列表</a></li>
+                <li><a href="filter.html">路线筛选</a></li>
+                <li><a href="guide.html">徒步指南</a></li>
+                <li><a href="about.html">关于我们</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- 英雄区域 -->
+    <section class="hero" style="background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('pic.png'); background-size: cover; background-position: center;">
+        <h1>探索北京周边的自然美景</h1>
+        <p>远离城市喧嚣，踏上徒步之旅，感受大自然的宁静与美丽。我们为您精选了北京周边最优质的徒步路线，让您的每一次出行都充满惊喜。</p>
+        <a href="routes.html" class="btn">探索路线</a>
+    </section>
+
+    <!-- 特色路线 -->
+    <section class="container">
+        <h2 style="text-align: center; margin: 3rem 0; color: var(--dark-color);">特色路线</h2>
+        <div class="grid" id="featured-routes">
+            <!-- 路线卡片将通过JavaScript动态生成 -->
+            <div class="loading">
+                <div class="loading-spinner"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 网站介绍 -->
+    <section style="background: linear-gradient(135deg, var(--light-color), var(--primary-color)); padding: 4rem 0; margin: 3rem 0;">
+        <div class="container">
+            <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 2rem;">
+                <div style="flex: 1; min-width: 300px;">
+                    <h2 style="color: var(--dark-color); margin-bottom: 1.5rem;">关于北京徒个乐</h2>
+                    <p style="margin-bottom: 1rem; line-height: 1.8;">北京徒个乐是一个专注于北京及周边地区徒步路线的信息平台，我们致力于为徒步爱好者提供详细、准确的路线信息，帮助您规划完美的徒步之旅。</p>
+                    <p style="margin-bottom: 1rem; line-height: 1.8;">无论您是新手入门，还是经验丰富的户外爱好者，我们都能为您找到适合的路线。从城市公园到远郊山区，从休闲漫步到挑战自我，这里总有一条路线适合您。</p>
+                    <a href="about.html" class="btn">了解更多</a>
+                </div>
+                <div style="flex: 1; min-width: 300px;">
+                    <img src="pic2.png" alt="北京徒步" style="width: 100%; border-radius: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 快速链接 -->
+    <section class="container">
+        <h2 style="text-align: center; margin: 3rem 0; color: var(--dark-color);">快速导航</h2>
+        <div class="grid">
+            <div class="card fade-in">
+                <div class="card-img" style="background-image: url('pic3.jpg');"></div>
+                <div class="card-content">
+                    <h3 class="card-title">路线列表</h3>
+                    <p class="card-text">浏览所有北京周边的徒步路线，找到适合您的那一条。</p>
+                    <a href="routes.html" class="btn">查看全部路线</a>
+                </div>
+            </div>
+            <div class="card fade-in">
+                <div class="card-img" style="background-image: url('pic4.jpg');"></div>
+                <div class="card-content">
+                    <h3 class="card-title">路线筛选</h3>
+                    <p class="card-text">根据您的需求筛选路线，快速找到最适合的徒步方案。</p>
+                    <a href="filter.html" class="btn">开始筛选</a>
+                </div>
+            </div>
+            <div class="card fade-in">
+                <div class="card-img" style="background-image: url('pic5.jpg');"></div>
+                <div class="card-content">
+                    <h3 class="card-title">徒步指南</h3>
+                    <p class="card-text">获取徒步必备知识，让您的徒步之旅更加安全、愉快。</p>
+                    <a href="guide.html" class="btn">查看指南</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>北京徒个乐</h3>
+                <p>探索城市周边的自然美景，享受徒步的乐趣。</p>
+            </div>
+            <div class="footer-section">
+                <h3>快速链接</h3>
+                <a href="index.html">首页</a>
+                <a href="routes.html">路线列表</a>
+                <a href="filter.html">路线筛选</a>
+                <a href="guide.html">徒步指南</a>
+                <a href="about.html">关于我们</a>
+            </div>
+            <div class="footer-section">
+                <h3>联系我们</h3>
+                <p>邮箱: thisisnotreal.com</p>
+                <p>电话: 123-4567-8910</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 北京徒个乐. 保留所有权利.</p>
+        </div>
+    </footer>
+
+    <!-- 滚动到顶部按钮 -->
+    <button id="scroll-to-top" style="position: fixed; bottom: 2rem; right: 2rem; background: var(--primary-color); color: white; border: none; border-radius: 50%; width: 50px; height: 50px; display: none; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.2); transition: all 0.3s ease;" onclick="scrollToTop()">↑</button>
+
+    <!-- JavaScript -->
+    <script src="js/main.js"></script>
+</body>
+</html>
