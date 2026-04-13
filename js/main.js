@@ -134,25 +134,12 @@ function createParticle(x, y, colors) {
 function renderHomePage() {
     const hero = document.querySelector('.hero');
     if (hero) {
-        // 按区域分组，每个区域选择一条路线
-        const routesByArea = {};
+        // 直接选择指定的三条路线作为特色路线
+        const featuredRouteNames = ['银山塔林', '东指壶', '藤萝谷'];
+        const featuredRoutes = featuredRouteNames.map(name => 
+            hikingRoutes.find(route => route['名称'] === name)
+        ).filter(route => route !== undefined);
         
-        // 对路线进行随机排序，确保每次选择不同的路线
-        const shuffledRoutes = [...hikingRoutes].sort(() => Math.random() - 0.5);
-        
-        shuffledRoutes.forEach(route => {
-            const area = route['所在区域'];
-            if (!routesByArea[area]) {
-                routesByArea[area] = route;
-            }
-        });
-        
-        // 对区域路线进行随机排序，确保每次显示顺序不同
-        const areaRoutes = Object.values(routesByArea);
-        const shuffledAreaRoutes = areaRoutes.sort(() => Math.random() - 0.5);
-        
-        // 从每个区域中选择一条路线，最多选择3条
-        const featuredRoutes = shuffledAreaRoutes.slice(0, 3);
         const featuredSection = document.getElementById('featured-routes');
         if (featuredSection) {
             featuredSection.innerHTML = '';
@@ -363,6 +350,9 @@ function createRouteItem(route) {
     const item = document.createElement('div');
     item.className = 'route-item fade-in';
     
+    const isMarked = isRouteMarked(route['名称']);
+    const buttonText = isMarked ? '已邂逅' : '待来日';
+    
     item.innerHTML = `
         <h3>${route['名称']}</h3>
         <p>${route['核心体验'] || route['路线特色'] || '暂无描述'}</p>
@@ -371,10 +361,38 @@ function createRouteItem(route) {
             <span>👥 ${route['适合人群']}</span>
             <span>🌼 ${route['最佳季节'] || '四季皆宜'}</span>
         </div>
-        <a href="route-detail.html?name=${encodeURIComponent(route['名称'])}" class="btn" style="margin-top: 1rem;">查看详情</a>
+        <div style="display: flex; justify-content: space-between; margin-top: 1rem;">
+            <a href="route-detail.html?name=${encodeURIComponent(route['名称'])}" class="btn">查看详情</a>
+            <button class="btn" id="mark-btn-${route['名称']}" onclick="toggleRouteMark('${route['名称']}')">${buttonText}</button>
+        </div>
     `;
     
     return item;
+}
+
+// 检查路线是否已标记
+function isRouteMarked(routeName) {
+    const markedRoutes = JSON.parse(localStorage.getItem('markedRoutes') || '[]');
+    return markedRoutes.includes(routeName);
+}
+
+// 切换路线标记状态
+function toggleRouteMark(routeName) {
+    const markedRoutes = JSON.parse(localStorage.getItem('markedRoutes') || '[]');
+    const index = markedRoutes.indexOf(routeName);
+    
+    if (index > -1) {
+        // 已标记，取消标记
+        markedRoutes.splice(index, 1);
+    } else {
+        // 未标记，添加标记
+        markedRoutes.push(routeName);
+    }
+    
+    localStorage.setItem('markedRoutes', JSON.stringify(markedRoutes));
+    
+    // 重新渲染路线列表
+    renderRouteList();
 }
 
 // 创建路线详情HTML
@@ -388,20 +406,18 @@ function createRouteDetailHTML(route) {
         </div>
         <h2>${route['名称']}</h2>
         <div class="route-detail-meta">
-            <div>
-                <strong>所在区域:</strong> ${route['所在区域']}
+            <div style="display: flex; gap: 1rem; margin-bottom: 1rem; grid-column: 1 / -1;">
+                <div style="flex: 0.8;"><strong>所在区域:</strong> ${route['所在区域']}</div>
+                <div style="flex: 3.2;"><strong>门票:</strong> ${route['门票'] || '免费'}</div>
             </div>
             <div>
-                <strong>门票:</strong> ${route['门票'] || '免费'}
+                <strong>里程:</strong> ${route['里程(km)'] || '未知'} km
             </div>
             <div>
-                <strong>里程:</strong> ${route['里程(km)'] || '未知'}
+                <strong>累计爬升:</strong> ${route['平均累计爬升(m)'] || '未知'} m
             </div>
             <div>
-                <strong>累计爬升:</strong> ${route['平均累计爬升(m)'] || '未知'}
-            </div>
-            <div>
-                <strong>预计耗时:</strong> ${route['预计耗时(h)'] || '未知'}
+                <strong>预计耗时:</strong> ${route['预计耗时(h)'] || '未知'} h
             </div>
             <div>
                 <strong>适合人群:</strong> ${route['适合人群']}

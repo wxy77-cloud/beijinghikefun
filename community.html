@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>路线列表 - 北京徒个乐</title>
+    <title>徒步社区 - 北京徒个乐</title>
     <link rel="stylesheet" href="css/main.css">
     <link rel="icon" href="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=hiking%20icon%20purple%20color&image_size=square">
 </head>
@@ -26,23 +26,49 @@
 
     <!-- 页面标题 -->
     <section style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); padding: 3rem 0; text-align: center; color: white;">
-        <h1>北京徒步路线列表</h1>
-        <p>浏览所有北京周边的徒步路线，找到适合您的那一条</p>
+        <h1>徒步社区</h1>
+        <p>分享您的徒步经历，记录美好瞬间</p>
     </section>
 
-    <!-- 搜索框 -->
+    <!-- 社区内容 -->
     <section class="container">
-        <div class="search-container">
-            <input type="text" id="search-input" class="search-input" placeholder="搜索路线名称">
-        </div>
-    </section>
+        <div class="community-layout">
+            <!-- 发帖表单 -->
+            <div class="create-post-section">
+                <h2 style="color: var(--dark-color); margin-bottom: 1.5rem;">分享您的徒步经历</h2>
+                <form id="post-form" class="post-form">
+                    <div class="form-group">
+                        <label for="post-title">标题</label>
+                        <input type="text" id="post-title" placeholder="给您的帖子起个标题" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="post-content">内容</label>
+                        <textarea id="post-content" rows="5" placeholder="分享您的徒步经历、感受和建议..." required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="post-image">图片</label>
+                        <input type="file" id="post-image" accept="image/*">
+                        <small style="color: #666;">支持上传图片，展示您的徒步美景</small>
+                    </div>
+                    <button type="submit" class="btn">发布帖子</button>
+                </form>
+            </div>
 
-    <!-- 路线列表 -->
-    <section class="container">
-        <div id="route-list" class="route-list">
-            <!-- 路线列表项将通过JavaScript动态生成 -->
-            <div class="loading">
-                <div class="loading-spinner"></div>
+            <!-- 帖子列表 -->
+            <div class="posts-section">
+                <div class="posts-header">
+                    <h2 style="color: var(--dark-color);">社区帖子</h2>
+                    <div class="sort-buttons">
+                        <button class="sort-btn active" data-sort="time">按时间</button>
+                        <button class="sort-btn" data-sort="hot">按热度</button>
+                    </div>
+                </div>
+                <div id="posts-list" class="posts-list">
+                    <!-- 帖子将通过JavaScript动态生成 -->
+                    <div class="loading">
+                        <div class="loading-spinner"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -60,6 +86,7 @@
                 <a href="routes.html">路线列表</a>
                 <a href="filter.html">路线筛选</a>
                 <a href="guide.html">徒步指南</a>
+                <a href="community.html">徒步社区</a>
                 <a href="about.html">关于我们</a>
             </div>
             <div class="footer-section">
@@ -78,5 +105,6 @@
 
     <!-- JavaScript -->
     <script src="js/main.js"></script>
+    <script src="js/community.js"></script>
 </body>
 </html>

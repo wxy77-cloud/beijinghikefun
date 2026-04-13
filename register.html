@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>注册账号 - 北京徒个乐</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="icon" href="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=hiking%20icon%20purple%20color&image_size=square">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <header>
+        <nav>
+            <a href="index.html" class="logo">北京徒个乐</a>
+            <ul class="nav-links">
+                <li><a href="index.html">首页</a></li>
+                <li><a href="routes.html">路线列表</a></li>
+                <li><a href="filter.html">路线筛选</a></li>
+                <li><a href="guide.html">徒步指南</a></li>
+                <li><a href="community.html">徒步社区</a></li>
+                <li><a href="register.html" class="active">注册</a></li>
+                <li><a href="about.html">关于我们</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- 页面标题 -->
+    <section style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); padding: 3rem 0; text-align: center; color: white;">
+        <h1>注册账号</h1>
+        <p>加入我们的徒步社区，分享你的徒步经历</p>
+    </section>
+
+    <!-- 注册表单 -->
+    <section class="container">
+        <div class="register-container">
+            <div class="register-form-container">
+                <h2 style="color: var(--dark-color); margin-bottom: 2rem;">创建你的账号</h2>
+                <form id="register-form" class="register-form">
+                    <div class="form-group">
+                        <label for="user-id">ID</label>
+                        <input type="text" id="user-id" placeholder="请输入你的ID" required>
+                        <small style="color: #666;">ID将在社区中显示</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="user-title">选择称号</label>
+                        <select id="user-title" required>
+                            <option value="">请选择一个称号</option>
+                            <option value="步道观光客">步道观光客</option>
+                            <option value="山野体验官">山野体验官</option>
+                            <option value="山脊追风者">山脊追风者</option>
+                            <option value="路线探索家">路线探索家</option>
+                            <option value="群山踏遍者">群山踏遍者</option>
+                            <option value="巅峰挑战者">巅峰挑战者</option>
+                            <option value="徒步干饭王">徒步干饭王</option>
+                            <option value="拍照第一名">拍照第一名</option>
+                            <option value="路痴导航员">路痴导航员</option>
+                            <option value="山顶许愿家">山顶许愿家</option>
+                            <option value="自然同行者">自然同行者</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="user-gender">性别</label>
+                        <div class="gender-options">
+                            <label>
+                                <input type="radio" name="gender" value="男" required>
+                                <span>男</span>
+                            </label>
+                            <label>
+                                <input type="radio" name="gender" value="女">
+                                <span>女</span>
+                            </label>
+                            <label>
+                                <input type="radio" name="gender" value="其他">
+                                <span>其他</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="user-age">年龄</label>
+                        <input type="number" id="user-age" min="1" max="120" placeholder="请输入你的年龄" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="user-email">邮箱（选填）</label>
+                        <input type="email" id="user-email" placeholder="请输入你的邮箱">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="user-bio">个人简介（选填）</label>
+                        <textarea id="user-bio" rows="3" placeholder="介绍一下自己吧..."></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn">注册</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>北京徒个乐</h3>
+                <p>探索城市周边的自然美景，享受徒步的乐趣。</p>
+            </div>
+            <div class="footer-section">
+                <h3>快速链接</h3>
+                <a href="index.html">首页</a>
+                <a href="routes.html">路线列表</a>
+                <a href="filter.html">路线筛选</a>
+                <a href="guide.html">徒步指南</a>
+                <a href="community.html">徒步社区</a>
+                <a href="register.html">注册</a>
+                <a href="about.html">关于我们</a>
+            </div>
+            <div class="footer-section">
+                <h3>联系我们</h3>
+                <p>邮箱: thisisnotreal.com</p>
+                <p>电话: 14-28-57</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 北京徒个乐. 保留所有权利.</p>
+        </div>
+    </footer>
+
+    <!-- 滚动到顶部按钮 -->
+    <button id="scroll-to-top" style="position: fixed; bottom: 2rem; right: 2rem; background: var(--primary-color); color: white; border: none; border-radius: 50%; width: 50px; height: 50px; display: none; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.2); transition: all 0.3s ease;" onclick="scrollToTop()">↑</button>
+
+    <!-- JavaScript -->
+    <script src="js/main.js"></script>
+    <script src="js/auth.js"></script>
+</body>
+</html>
