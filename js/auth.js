@@ -23,6 +23,20 @@ function loadCurrentUser() {
 function saveCurrentUser(user) {
     currentUser = user;
     localStorage.setItem('currentUser', JSON.stringify(user));
+    
+    // 保存用户到用户列表
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    const existingUserIndex = users.findIndex(u => u.phone === user.phone);
+    
+    if (existingUserIndex > -1) {
+        // 更新现有用户
+        users[existingUserIndex] = user;
+    } else {
+        // 添加新用户
+        users.push(user);
+    }
+    
+    localStorage.setItem('users', JSON.stringify(users));
 }
 
 // 绑定认证相关事件
@@ -31,6 +45,12 @@ function bindAuthEvents() {
     const registerForm = document.getElementById('register-form');
     if (registerForm) {
         registerForm.addEventListener('submit', handleRegister);
+    }
+    
+    // 登录表单
+    const loginForm = document.getElementById('login-form');
+    if (loginForm) {
+        loginForm.addEventListener('submit', handleLogin);
     }
     
     // 个人主页事件
@@ -65,6 +85,7 @@ function handleRegister(e) {
     e.preventDefault();
     
     const userId = document.getElementById('user-id').value.trim();
+    const userPhone = document.getElementById('user-phone').value.trim();
     const userTitle = document.getElementById('user-title').value;
     const userGender = document.querySelector('input[name="gender"]:checked');
     const userAge = document.getElementById('user-age').value;
@@ -73,6 +94,16 @@ function handleRegister(e) {
     
     if (!userId) {
         alert('请输入ID');
+        return;
+    }
+    
+    if (!userPhone) {
+        alert('请输入手机号');
+        return;
+    }
+    
+    if (!/^1[3-9]\d{9}$/.test(userPhone)) {
+        alert('请输入正确的手机号');
         return;
     }
     
@@ -93,6 +124,7 @@ function handleRegister(e) {
     
     const newUser = {
         id: userId,
+        phone: userPhone,
         title: userTitle,
         gender: userGender.value,
         age: userAge,
@@ -156,6 +188,39 @@ function handleEditProfile(e) {
     renderProfile();
     
     alert('资料更新成功！');
+}
+
+// 处理登录
+function handleLogin(e) {
+    e.preventDefault();
+    
+    const phone = document.getElementById('login-phone').value.trim();
+    
+    if (!phone) {
+        alert('请输入手机号');
+        return;
+    }
+    
+    if (!/^1[3-9]\d{9}$/.test(phone)) {
+        alert('请输入正确的手机号');
+        return;
+    }
+    
+    // 从用户列表中查找用户
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    const user = users.find(u => u.phone === phone);
+    
+    if (user) {
+        // 登录成功
+        saveCurrentUser(user);
+        updateNavigation();
+        alert('登录成功！');
+        window.location.href = 'profile.html';
+    } else {
+        // 登录失败
+        alert('该手机号未注册，请先注册');
+        window.location.href = 'register.html';
+    }
 }
 
 // 处理退出登录

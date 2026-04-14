@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录 - 北京徒个乐</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="icon" href="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=hiking%20icon%20purple%20color&image_size=square">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <header>
+        <nav>
+            <a href="index.html" class="logo">北京徒个乐</a>
+            <ul class="nav-links">
+                <li><a href="index.html">首页</a></li>
+                <li><a href="routes.html">路线列表</a></li>
+                <li><a href="filter.html">路线筛选</a></li>
+                <li><a href="guide.html">徒步指南</a></li>
+                <li><a href="community.html">徒步社区</a></li>
+                <li><a href="profile.html">个人主页</a></li>
+                <li><a href="about.html">关于我们</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- 页面标题 -->
+    <section style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); padding: 3rem 0; text-align: center; color: white;">
+        <h1>登录账号</h1>
+        <p>欢迎回来，继续你的徒步之旅</p>
+    </section>
+
+    <!-- 登录表单 -->
+    <section class="container">
+        <div class="register-container">
+            <div class="register-form-container">
+                <h2 style="color: var(--dark-color); margin-bottom: 2rem;">登录你的账号</h2>
+                <form id="login-form" class="register-form">
+                    <div class="form-group">
+                        <label for="login-phone">手机号</label>
+                        <input type="tel" id="login-phone" placeholder="请输入你的手机号" required>
+                    </div>
+                    
+                    <button type="submit" class="btn">登录</button>
+                    
+                    <div style="margin-top: 1.5rem; text-align: center;">
+                        <p>还没有账号？<a href="register.html" style="color: var(--primary-color); text-decoration: underline;">立即注册</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>北京徒个乐</h3>
+                <p>探索城市周边的自然美景，享受徒步的乐趣。</p>
+            </div>
+            <div class="footer-section">
+                <h3>快速链接</h3>
+                <a href="index.html">首页</a>
+                <a href="routes.html">路线列表</a>
+                <a href="filter.html">路线筛选</a>
+                <a href="guide.html">徒步指南</a>
+                <a href="community.html">徒步社区</a>
+                <a href="register.html">注册</a>
+                <a href="about.html">关于我们</a>
+            </div>
+            <div class="footer-section">
+                <h3>联系我们</h3>
+                <p>邮箱: thisisnotreal.com</p>
+                <p>电话: 14-28-57</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 北京徒个乐. 保留所有权利.</p>
+        </div>
+    </footer>
+
+    <!-- 滚动到顶部按钮 -->
+    <button id="scroll-to-top" style="position: fixed; bottom: 2rem; right: 2rem; background: var(--primary-color); color: white; border: none; border-radius: 50%; width: 50px; height: 50px; display: none; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.2); transition: all 0.3s ease;" onclick="scrollToTop()">↑</button>
+
+    <!-- JavaScript -->
+    <script src="js/main.js"></script>
+    <script src="js/auth.js"></script>
+</body>
+</html>
