@@ -3,9 +3,25 @@
 // 全局变量
 let posts = [];
 let currentSort = 'time';
+let currentUser = null;
+
+// 加载当前用户
+function loadCurrentUser() {
+    const storedUser = localStorage.getItem('currentUser');
+    if (storedUser) {
+        currentUser = JSON.parse(storedUser);
+    }
+}
+
+// 检查是否是帖子作者
+function isPostAuthor(authorId) {
+    if (!currentUser) return false;
+    return currentUser.id === authorId;
+}
 
 // 页面加载完成后执行
 document.addEventListener('DOMContentLoaded', function() {
+    loadCurrentUser();
     loadPosts();
     bindEvents();
 });
@@ -261,9 +277,11 @@ function createPostCard(post) {
             <button class="post-action-btn comment-toggle-btn" onclick="toggleComments(${post.id})"><span>💬</span>
                 <span>${post.comments.length}</span>
             </button>
+            ${isPostAuthor(post.author) ? `
             <button class="post-action-btn delete-btn" onclick="handleDelete(${post.id})"><span>🗑️</span>
                 <span>删除</span>
             </button>
+            ` : ''}
         </div>
         <div class="post-comments" id="comments-${post.id}" style="display: none;">
             ${commentsHTML}
@@ -340,6 +358,28 @@ function handleComment(postId) {
 
 // 处理删除帖子
 function handleDelete(postId) {
+    // 获取当前用户信息
+    let currentUser = null;
+    const storedUser = localStorage.getItem('currentUser');
+    if (storedUser) {
+        currentUser = JSON.parse(storedUser);
+    }
+    
+    if (!currentUser) {
+        alert('请先登录');
+        return;
+    }
+    
+    // 找到要删除的帖子
+    const post = posts.find(p => p.id === postId);
+    if (!post) return;
+    
+    // 检查是否是帖子作者
+    if (post.author !== currentUser.id) {
+        alert('只能删除自己发布的帖子');
+        return;
+    }
+    
     if (confirm('确定要删除这篇帖子吗？')) {
         // 过滤掉要删除的帖子
         posts = posts.filter(post => post.id !== postId);

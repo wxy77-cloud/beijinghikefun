@@ -234,6 +234,63 @@ function handleLogout() {
     }
 }
 
+// 处理点赞
+function handleLike(postId) {
+    const posts = JSON.parse(localStorage.getItem('hikingPosts') || '[]');
+    const post = posts.find(p => p.id === postId);
+    if (!post) return;
+    
+    if (post.liked) {
+        post.likes--;
+        post.liked = false;
+    } else {
+        post.likes++;
+        post.liked = true;
+    }
+    
+    localStorage.setItem('hikingPosts', JSON.stringify(posts));
+    
+    // 重新渲染帖子
+    if (window.location.pathname.includes('profile.html')) {
+        renderUserPosts();
+    } else if (window.location.pathname.includes('community.html')) {
+        // 社区页面会自动重新渲染
+    }
+}
+
+// 处理删除帖子
+function handleDelete(postId) {
+    if (!currentUser) {
+        alert('请先登录');
+        return;
+    }
+    
+    // 找到要删除的帖子
+    let posts = JSON.parse(localStorage.getItem('hikingPosts') || '[]');
+    const post = posts.find(p => p.id === postId);
+    if (!post) return;
+    
+    // 检查是否是帖子作者
+    if (post.author !== currentUser.id) {
+        alert('只能删除自己发布的帖子');
+        return;
+    }
+    
+    if (confirm('确定要删除这篇帖子吗？')) {
+        posts = posts.filter(post => post.id !== postId);
+        localStorage.setItem('hikingPosts', JSON.stringify(posts));
+        
+        // 重新渲染帖子
+        if (window.location.pathname.includes('profile.html')) {
+            renderUserPosts();
+        } else if (window.location.pathname.includes('community.html')) {
+            // 社区页面会自动重新渲染
+        }
+        
+        alert('帖子已删除！');
+    }
+}
+
 // 处理显示/隐藏个人信息
 function handleShowInfoChange() {
     if (!currentUser) return;
@@ -346,9 +403,9 @@ function createUserPostCard(post) {
     card.innerHTML = `
         <div class="post-header">
             <div class="post-author">
-                <div class="post-avatar">${currentUser.avatar}</div>
+                <div class="post-avatar">${post.avatar}</div>
                 <div class="post-author-info">
-                    <h4>${currentUser.id}</h4>
+                    <h4>${post.author}</h4>
                     <span>${timeString}</span>
                 </div>
             </div>
@@ -365,10 +422,12 @@ function createUserPostCard(post) {
                 <span>💬</span>
                 <span>${post.comments.length}</span>
             </button>
+            ${post.author === currentUser.id ? `
             <button class="post-action-btn delete-btn" onclick="handleDelete(${post.id})">
                 <span>🗑️</span>
                 <span>删除</span>
             </button>
+            ` : ''}
         </div>
     `;
     
