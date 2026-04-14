@@ -234,63 +234,6 @@ function handleLogout() {
     }
 }
 
-// 处理点赞
-function handleLike(postId) {
-    const posts = JSON.parse(localStorage.getItem('hikingPosts') || '[]');
-    const post = posts.find(p => p.id === postId);
-    if (!post) return;
-    
-    if (post.liked) {
-        post.likes--;
-        post.liked = false;
-    } else {
-        post.likes++;
-        post.liked = true;
-    }
-    
-    localStorage.setItem('hikingPosts', JSON.stringify(posts));
-    
-    // 重新渲染帖子
-    if (window.location.pathname.includes('profile.html')) {
-        renderUserPosts();
-    } else if (window.location.pathname.includes('community.html')) {
-        // 社区页面会自动重新渲染
-    }
-}
-
-// 处理删除帖子
-function handleDelete(postId) {
-    if (!currentUser) {
-        alert('请先登录');
-        return;
-    }
-    
-    // 找到要删除的帖子
-    let posts = JSON.parse(localStorage.getItem('hikingPosts') || '[]');
-    const post = posts.find(p => p.id === postId);
-    if (!post) return;
-    
-    // 检查是否是帖子作者
-    if (post.author !== currentUser.id) {
-        alert('只能删除自己发布的帖子');
-        return;
-    }
-    
-    if (confirm('确定要删除这篇帖子吗？')) {
-        posts = posts.filter(post => post.id !== postId);
-        localStorage.setItem('hikingPosts', JSON.stringify(posts));
-        
-        // 重新渲染帖子
-        if (window.location.pathname.includes('profile.html')) {
-            renderUserPosts();
-        } else if (window.location.pathname.includes('community.html')) {
-            // 社区页面会自动重新渲染
-        }
-        
-        alert('帖子已删除！');
-    }
-}
-
 // 处理显示/隐藏个人信息
 function handleShowInfoChange() {
     if (!currentUser) return;
@@ -362,100 +305,6 @@ function renderProfile() {
         document.getElementById('personal-info').style.display = 'none';
         document.getElementById('empty-profile').style.display = 'block';
     }
-    
-    // 显示用户帖子
-    renderUserPosts();
-}
-
-// 渲染用户帖子
-function renderUserPosts() {
-    const userPostsContainer = document.getElementById('user-posts');
-    if (!userPostsContainer) return;
-    
-    const posts = JSON.parse(localStorage.getItem('hikingPosts') || '[]');
-    const userPosts = posts.filter(post => post.author === currentUser.id);
-    
-    if (userPosts.length === 0) {
-        userPostsContainer.innerHTML = '<div style="text-align: center; padding: 2rem; color: #666;">你还没有发布过帖子</div>';
-        return;
-    }
-    
-    userPostsContainer.innerHTML = '';
-    userPosts.forEach(post => {
-        const postCard = createUserPostCard(post);
-        userPostsContainer.appendChild(postCard);
-    });
-}
-
-// 创建用户帖子卡片
-function createUserPostCard(post) {
-    const card = document.createElement('div');
-    card.className = 'post-card fade-in';
-    
-    const timeString = formatTime(post.timestamp);
-    const likeClass = post.liked ? 'liked' : '';
-    
-    let imageHTML = '';
-    if (post.image) {
-        imageHTML = `<img src="${post.image}" alt="帖子图片" class="post-image">`;
-    }
-    
-    card.innerHTML = `
-        <div class="post-header">
-            <div class="post-author">
-                <div class="post-avatar">${post.avatar}</div>
-                <div class="post-author-info">
-                    <h4>${post.author}</h4>
-                    <span>${timeString}</span>
-                </div>
-            </div>
-        </div>
-        <h3 class="post-title">${post.title}</h3>
-        <div class="post-content">${post.content}</div>
-        ${imageHTML}
-        <div class="post-actions">
-            <button class="post-action-btn like-btn ${likeClass}" onclick="handleLike(${post.id})">
-                <span>❤️</span>
-                <span class="like-count">${post.likes}</span>
-            </button>
-            <button class="post-action-btn">
-                <span>💬</span>
-                <span>${post.comments.length}</span>
-            </button>
-            ${post.author === currentUser.id ? `
-            <button class="post-action-btn delete-btn" onclick="handleDelete(${post.id})">
-                <span>🗑️</span>
-                <span>删除</span>
-            </button>
-            ` : ''}
-        </div>
-    `;
-    
-    return card;
-}
-
-// 格式化时间
-function formatTime(timestamp) {
-    const now = Date.now();
-    const diff = now - timestamp;
-    
-    const minute = 60 * 1000;
-    const hour = 60 * minute;
-    const day = 24 * hour;
-    const month = 30 * day;
-    
-    if (diff < minute) {
-        return '刚刚';
-    } else if (diff < hour) {
-        return Math.floor(diff / minute) + '分钟前';
-    } else if (diff < day) {
-        return Math.floor(diff / hour) + '小时前';
-    } else if (diff < month) {
-        return Math.floor(diff / day) + '天前';
-    } else {
-        const date = new Date(timestamp);
-        return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
-    }
 }
 
 // 更新导航栏
@@ -471,21 +320,6 @@ function updateNavigation() {
             }
         }
     });
-}
-
-// 处理删除帖子
-function handleDelete(postId) {
-    if (confirm('确定要删除这篇帖子吗？')) {
-        // 从localStorage中获取帖子数据
-        let posts = JSON.parse(localStorage.getItem('hikingPosts') || '[]');
-        // 过滤掉要删除的帖子
-        posts = posts.filter(post => post.id !== postId);
-        // 保存回localStorage
-        localStorage.setItem('hikingPosts', JSON.stringify(posts));
-        // 重新渲染用户帖子
-        renderUserPosts();
-        alert('帖子已删除！');
-    }
 }
 
 // 获取当前用户信息（供其他文件使用）

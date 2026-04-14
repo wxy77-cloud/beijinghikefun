@@ -23,8 +23,26 @@ function isPostAuthor(authorId) {
 document.addEventListener('DOMContentLoaded', function() {
     loadCurrentUser();
     loadPosts();
+    checkLoginStatus();
     bindEvents();
 });
+
+// 检查登录状态
+function checkLoginStatus() {
+    const createPostSection = document.querySelector('.create-post-section');
+    if (!createPostSection) return;
+    
+    if (!currentUser) {
+        // 未登录状态
+        createPostSection.innerHTML = `
+            <h2 style="color: var(--dark-color); margin-bottom: 1.5rem;">分享您的徒步经历</h2>
+            <div style="background: #f5f5f5; padding: 2rem; border-radius: 8px; text-align: center;">
+                <p style="font-size: 1.1rem; margin-bottom: 1.5rem;">请先登录后再发布帖子</p>
+                <a href="login.html" class="btn">去登录</a>
+            </div>
+        `;
+    }
+}
 
 // 加载帖子数据
 function loadPosts() {
@@ -122,6 +140,12 @@ function bindEvents() {
 function handlePostSubmit(e) {
     e.preventDefault();
     
+    if (!currentUser) {
+        alert('请先登录后再发布帖子');
+        window.location.href = 'login.html';
+        return;
+    }
+    
     const titleInput = document.getElementById('post-title');
     const contentInput = document.getElementById('post-content');
     const imageInput = document.getElementById('post-image');
@@ -134,19 +158,12 @@ function handlePostSubmit(e) {
         return;
     }
     
-    // 获取当前用户信息
-    let currentUser = null;
-    const storedUser = localStorage.getItem('currentUser');
-    if (storedUser) {
-        currentUser = JSON.parse(storedUser);
-    }
-    
     const newPost = {
         id: Date.now(),
         title: title,
         content: content,
-        author: currentUser ? currentUser.id : '匿名用户',
-        avatar: currentUser ? currentUser.avatar : '匿',
+        author: currentUser.id,
+        avatar: currentUser.avatar,
         image: null,
         timestamp: Date.now(),
         likes: 0,

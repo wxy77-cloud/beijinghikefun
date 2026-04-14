@@ -33,41 +33,75 @@
     <!-- 社区内容 -->
     <section class="container">
         <div class="community-layout">
-            <!-- 发帖表单 -->
-            <div class="create-post-section">
-                <h2 style="color: var(--dark-color); margin-bottom: 1.5rem;">分享您的徒步经历</h2>
-                <form id="post-form" class="post-form">
-                    <div class="form-group">
-                        <label for="post-title">标题</label>
-                        <input type="text" id="post-title" placeholder="给您的帖子起个标题" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="post-content">内容</label>
-                        <textarea id="post-content" rows="5" placeholder="分享您的徒步经历、感受和建议..." required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="post-image">图片</label>
-                        <input type="file" id="post-image" accept="image/*">
-                        <small style="color: #666;">支持上传图片，展示您的徒步美景</small>
-                    </div>
-                    <button type="submit" class="btn">发布帖子</button>
-                </form>
-            </div>
-
-            <!-- 帖子列表 -->
-            <div class="posts-section">
-                <div class="posts-header">
-                    <h2 style="color: var(--dark-color);">社区帖子</h2>
-                    <div class="sort-buttons">
-                        <button class="sort-btn active" data-sort="time">按时间</button>
-                        <button class="sort-btn" data-sort="hot">按热度</button>
+            <!-- 发帖和评论区域 -->
+            <div class="create-post-section" style="width: 100%;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <h2 style="color: var(--dark-color); margin: 0;">社区讨论</h2>
+                    <a href="https://github.com/wxy77-cloud/beijinghikefun/discussions" target="_blank" class="btn" style="padding: 0.5rem 1rem; font-size: 0.9rem; text-decoration: none;">
+                        📝 管理我的帖子
+                    </a>
+                </div>
+                <p style="margin-bottom: 1rem; color: #666;">这里是徒步爱好者的交流社区，欢迎分享您的徒步经历、照片和建议。</p>
+                
+                <!-- 可折叠的图片上传说明 -->
+                <div style="margin-bottom: 1rem;">
+                    <button onclick="toggleSection('upload-guide')" class="btn" style="width: 100%; display: flex; justify-content: space-between; align-items: center; text-align: left; padding: 1rem; background-color: #e6e0ff;">
+                        <span>📷 如何上传照片</span>
+                        <span id="upload-guide-toggle">▼</span>
+                    </button>
+                    <div id="upload-guide" style="background: #f8f9fa; padding: 1.5rem; border-radius: 0 0 8px 8px; border-left: 4px solid var(--primary-color); border-right: 1px solid #dee2e6; border-bottom: 1px solid #dee2e6; display: none;">
+                        <p style="margin-bottom: 0.5rem; color: #666;"><strong>方法1：拖拽上传</strong> - 直接将图片拖拽到评论框中</p>
+                        <p style="margin-bottom: 0.5rem; color: #666;"><strong>方法2：粘贴上传</strong> - 复制图片后粘贴到评论框（Ctrl+V）</p>
+                        <p style="margin-bottom: 0.5rem; color: #666;"><strong>方法3：Markdown语法</strong> - 使用 <code style="background: #e9ecef; padding: 0.2rem 0.4rem; border-radius: 3px;">![图片描述](图片URL)</code></p>
+                        <p style="margin: 0; color: #666; font-size: 0.9rem;">💡 提示：需要先使用GitHub账号登录才能上传图片</p>
                     </div>
                 </div>
-                <div id="posts-list" class="posts-list">
-                    <!-- 帖子将通过JavaScript动态生成 -->
-                    <div class="loading">
-                        <div class="loading-spinner"></div>
+                
+                <!-- 可折叠的Markdown示例 -->
+                <div style="margin-bottom: 2rem;">
+                    <button onclick="toggleSection('markdown-guide')" class="btn" style="width: 100%; display: flex; justify-content: space-between; align-items: center; text-align: left; padding: 1rem; background-color: #e6e0ff;">
+                        <span>✏️ Markdown示例</span>
+                        <span id="markdown-guide-toggle">▼</span>
+                    </button>
+                    <div id="markdown-guide" style="background: #fff3cd; padding: 1.5rem; border-radius: 0 0 8px 8px; border-left: 4px solid #ffc107; border-right: 1px solid #dee2e6; border-bottom: 1px solid #dee2e6; display: none;">
+                        <pre style="background: #fff; padding: 1rem; border-radius: 4px; overflow-x: auto; margin: 0; font-size: 0.9rem;">
+# 今天去了香山
+
+今天天气真好，爬到山顶看到了美丽的红叶！
+
+![香山红叶](https://example.com/image.jpg)
+
+路线推荐：
+- 从东门上山
+- 大约需要3小时
+- 适合新手
+
+下次还想再去一次！</pre>
                     </div>
+                </div>
+                
+                <p style="margin-bottom: 2rem; color: #666; font-size: 0.9rem;">
+                    💡 <strong>其他提示：</strong>支持完整的Markdown格式，包括标题、列表、链接等
+                </p>
+                
+                <!-- Giscus评论系统 -->
+                <div class="giscus-container">
+                    <script src="https://giscus.app/client.js"
+                            data-repo="wxy77-cloud/beijinghikefun"
+                            data-repo-id="R_kgDOR-2u-w"
+                            data-category="Announcements"
+                            data-category-id="DIC_kwDOR-2u-84C6y23"
+                            data-mapping="pathname"
+                            data-strict="0"
+                            data-reactions-enabled="1"
+                            data-emit-metadata="0"
+                            data-input-position="bottom"
+                            data-theme="catppuccin_latte"
+                            data-lang="zh-CN"
+                            data-loading="lazy"
+                            crossorigin="anonymous"
+                            async>
+                    </script>
                 </div>
             </div>
         </div>
@@ -105,6 +139,20 @@
 
     <!-- JavaScript -->
     <script src="js/main.js"></script>
-    <script src="js/community.js"></script>
+    <script>
+        // 切换折叠/展开状态
+        function toggleSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            const toggleIcon = document.getElementById(sectionId + '-toggle');
+            
+            if (section.style.display === 'none') {
+                section.style.display = 'block';
+                toggleIcon.textContent = '▲';
+            } else {
+                section.style.display = 'none';
+                toggleIcon.textContent = '▼';
+            }
+        }
+    </script>
 </body>
 </html>

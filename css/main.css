@@ -684,9 +684,7 @@ table tr:hover {
 
 /* 社区页面样式 */
 .community-layout {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: 2rem;
+    display: block;
     margin-top: 2rem;
 }
 
@@ -695,9 +693,18 @@ table tr:hover {
     padding: 2rem;
     border-radius: 10px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    position: sticky;
-    top: 2rem;
-    height: fit-content;
+    max-width: 100%;
+}
+
+.giscus-container {
+    width: 100%;
+    margin-top: 1rem;
+    min-height: 400px;
+}
+
+.giscus-container iframe {
+    width: 100%;
+    min-height: 400px;
 }
 
 .post-form .form-group {
@@ -946,18 +953,12 @@ table tr:hover {
 
 /* 响应式设计 */
 @media (max-width: 768px) {
-    .community-layout {
-        grid-template-columns: 1fr;
-    }
-    
     .create-post-section {
-        position: static;
+        padding: 1.5rem;
     }
     
-    .posts-header {
-        flex-direction: column;
-        gap: 1rem;
-        align-items: flex-start;
+    .giscus-container {
+        margin-top: 0.5rem;
     }
 }
 
