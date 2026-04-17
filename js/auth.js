@@ -64,6 +64,11 @@ function bindAuthEvents() {
         logoutBtn.addEventListener('click', handleLogout);
     }
     
+    const deleteAccountBtn = document.getElementById('delete-account-btn');
+    if (deleteAccountBtn) {
+        deleteAccountBtn.addEventListener('click', handleDeleteAccount);
+    }
+    
     const closeModalBtn = document.getElementById('close-modal');
     if (closeModalBtn) {
         closeModalBtn.addEventListener('click', closeEditModal);
@@ -234,6 +239,31 @@ function handleLogout() {
     }
 }
 
+// 处理注销帐号
+function handleDeleteAccount() {
+    if (confirm('确定要注销帐号吗？此操作不可恢复，所有个人数据将被删除。')) {
+        if (currentUser) {
+            // 从用户列表中删除用户
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const updatedUsers = users.filter(u => u.phone !== currentUser.phone);
+            localStorage.setItem('users', JSON.stringify(updatedUsers));
+            
+            // 删除当前用户
+            localStorage.removeItem('currentUser');
+            currentUser = null;
+            
+            // 删除用户相关数据（如路线标记）
+            localStorage.removeItem('routeMarkStatus');
+            
+            updateNavigation();
+            renderProfile();
+            
+            alert('帐号注销成功！');
+            window.location.href = 'index.html';
+        }
+    }
+}
+
 // 处理显示/隐藏个人信息
 function handleShowInfoChange() {
     if (!currentUser) return;
@@ -282,6 +312,7 @@ function renderProfile() {
         document.getElementById('empty-profile').style.display = 'none';
         document.getElementById('edit-profile-btn').style.display = 'none';
         document.getElementById('logout-btn').style.display = 'none';
+        document.getElementById('delete-account-btn').style.display = 'none';
         return;
     }
     
@@ -291,6 +322,11 @@ function renderProfile() {
     const userTitleEl = document.getElementById('user-title');
     userTitleEl.innerHTML = currentUser.title;
     document.getElementById('show-info').checked = currentUser.showInfo || false;
+    
+    // 显示所有按钮
+    document.getElementById('edit-profile-btn').style.display = 'inline-block';
+    document.getElementById('logout-btn').style.display = 'inline-block';
+    document.getElementById('delete-account-btn').style.display = 'inline-block';
     
     if (currentUser.showInfo) {
         document.getElementById('personal-info').style.display = 'block';

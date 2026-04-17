@@ -56,6 +56,34 @@ function bindEvents() {
             searchRoutes();
         });
     }
+    
+    // 标记筛选按钮
+    const filterAll = document.getElementById('filter-all');
+    const filterPending = document.getElementById('filter-pending');
+    const filterDesired = document.getElementById('filter-desired');
+    const filterMet = document.getElementById('filter-met');
+    
+    if (filterAll && filterPending && filterDesired && filterMet) {
+        filterAll.addEventListener('click', function() {
+            filterRoutesByMark('all');
+            setActiveButton(filterAll);
+        });
+        
+        filterPending.addEventListener('click', function() {
+            filterRoutesByMark('pending');
+            setActiveButton(filterPending);
+        });
+        
+        filterDesired.addEventListener('click', function() {
+            filterRoutesByMark('desired');
+            setActiveButton(filterDesired);
+        });
+        
+        filterMet.addEventListener('click', function() {
+            filterRoutesByMark('met');
+            setActiveButton(filterMet);
+        });
+    }
 }
 
 // 初始化鼠标拖尾特效
@@ -136,18 +164,21 @@ function renderHomePage() {
     if (hero) {
         // 直接选择指定的三条路线作为特色路线
         const featuredRouteNames = ['银山塔林', '东指壶', '藤萝谷'];
-        const featuredRoutes = featuredRouteNames.map(name => 
-            hikingRoutes.find(route => route['名称'] === name)
-        ).filter(route => route !== undefined);
         
-        const featuredSection = document.getElementById('featured-routes');
-        if (featuredSection) {
-            featuredSection.innerHTML = '';
-            featuredRoutes.forEach(route => {
-                const routeCard = createRouteCard(route);
-                featuredSection.appendChild(routeCard);
+        // 更新特色路线的标记按钮文本
+        setTimeout(() => {
+            featuredRouteNames.forEach(routeName => {
+                const markStatus = getRouteMarkStatus(routeName);
+                const buttonTexts = ['有待来日', '心向往之', '已然相逢'];
+                const buttonText = buttonTexts[markStatus];
+                
+                // 查找对应的按钮并更新文本
+                const btn = document.getElementById(`featured-btn-${routeName}`);
+                if (btn) {
+                    btn.textContent = buttonText;
+                }
             });
-        }
+        }, 100);
     }
 }
 
@@ -321,6 +352,75 @@ function searchRoutes() {
     });
 }
 
+// 按标记状态筛选路线
+function filterRoutesByMark(status) {
+    const routeList = document.getElementById('route-list');
+    if (!routeList) return;
+    
+    let filteredRoutes = [];
+    
+    switch(status) {
+        case 'all':
+            filteredRoutes = hikingRoutes;
+            break;
+        case 'pending':
+            filteredRoutes = hikingRoutes.filter(route => getRouteMarkStatus(route['名称']) === 0);
+            break;
+        case 'desired':
+            filteredRoutes = hikingRoutes.filter(route => getRouteMarkStatus(route['名称']) === 1);
+            break;
+        case 'met':
+            filteredRoutes = hikingRoutes.filter(route => getRouteMarkStatus(route['名称']) === 2);
+            break;
+    }
+    
+    routeList.innerHTML = '';
+    
+    if (filteredRoutes.length === 0) {
+        let message = '';
+        switch(status) {
+            case 'pending':
+                message = '没有"有待来日"的路线';
+                break;
+            case 'desired':
+                message = '没有"心向往之"的路线';
+                break;
+            case 'met':
+                message = '没有"已然相逢"的路线';
+                break;
+        }
+        routeList.innerHTML = `<div style="text-align: center; padding: 2rem; color: #666;">${message}</div>`;
+        return;
+    }
+    
+    filteredRoutes.forEach(route => {
+        const routeItem = createRouteItem(route);
+        routeList.appendChild(routeItem);
+    });
+}
+
+// 设置激活按钮样式
+function setActiveButton(activeButton) {
+    const buttons = [
+        document.getElementById('filter-all'),
+        document.getElementById('filter-pending'),
+        document.getElementById('filter-desired'),
+        document.getElementById('filter-met')
+    ];
+    
+    buttons.forEach(button => {
+        if (button) {
+            if (button === activeButton) {
+                button.style.background = 'var(--accent-color)';
+                button.style.color = 'var(--dark-color)';
+            } else {
+                button.style.background = '#e6e0ff';
+                button.style.color = 'var(--dark-color)';
+            }
+        }
+    });
+}
+
 // 创建路线卡片
 function createRouteCard(route) {
     const card = document.createElement('div');
@@ -328,6 +428,9 @@ function createRouteCard(route) {
     
     // 使用本地图片
     const imageUrl = getRouteImage(route['名称']);
+    const markStatus = getRouteMarkStatus(route['名称']);
+    const buttonTexts = ['有待来日', '心向往之', '已然相逢'];
+    const buttonText = buttonTexts[markStatus];
     
     card.innerHTML = `
         <div class="card-img" style="background-image: url('${imageUrl}');" onerror="this.style.backgroundImage='url(\'pic.png\')'""></div>
@@ -338,7 +441,10 @@ function createRouteCard(route) {
                 <span class="tag">${route['所在区域']}</span>
                 <span class="tag">${route['适合人群']}</span>
             </div>
-            <a href="route-detail.html?name=${encodeURIComponent(route['名称'])}" class="btn">查看详情</a>
+            <div style="display: flex; gap: 1rem; margin-top: auto;">
+                <a href="route-detail.html?name=${encodeURIComponent(route['名称'])}" class="btn">查看详情</a>
+                <button class="btn" onclick="toggleRouteMark('${route['名称']}')">${buttonText}</button>
+            </div>
         </div>
     `;
     
@@ -350,8 +456,9 @@ function createRouteItem(route) {
     const item = document.createElement('div');
     item.className = 'route-item fade-in';
     
-    const isMarked = isRouteMarked(route['名称']);
-    const buttonText = isMarked ? '已邂逅' : '待来日';
+    const markStatus = getRouteMarkStatus(route['名称']);
+    const buttonTexts = ['有待来日', '心向往之', '已然相逢'];
+    const buttonText = buttonTexts[markStatus];
     
     item.innerHTML = `
         <h3>${route['名称']}</h3>
@@ -370,41 +477,104 @@ function createRouteItem(route) {
     return item;
 }
 
-// 检查路线是否已标记
+// 检查路线是否已标记（兼容旧代码，返回是否已被标记过）
 function isRouteMarked(routeName) {
-    const markedRoutes = JSON.parse(localStorage.getItem('markedRoutes') || '[]');
-    return markedRoutes.includes(routeName);
+    const markStatus = getRouteMarkStatus(routeName);
+    return markStatus > 0;
+}
+
+// 获取路线标记状态（0: 有待来日, 1: 心向往之, 2: 然然相逢）
+function getRouteMarkStatus(routeName) {
+    // 数据迁移：将旧的markedRoutes迁移到新的routeMarkStatus格式
+    migrateRouteMarkData();
+    
+    const routeMarks = JSON.parse(localStorage.getItem('routeMarkStatus') || '{}');
+    return routeMarks[routeName] || 0;
+}
+
+// 数据迁移函数
+function migrateRouteMarkData() {
+    const oldMarkedRoutes = localStorage.getItem('markedRoutes');
+    if (oldMarkedRoutes) {
+        const markedRoutes = JSON.parse(oldMarkedRoutes);
+        const routeMarks = JSON.parse(localStorage.getItem('routeMarkStatus') || '{}');
+        
+        markedRoutes.forEach(routeName => {
+            if (!routeMarks[routeName]) {
+                routeMarks[routeName] = 2; // 将旧标记设为"已然相逢"
+            }
+        });
+        
+        localStorage.setItem('routeMarkStatus', JSON.stringify(routeMarks));
+        localStorage.removeItem('markedRoutes'); // 删除旧数据
+    }
+}
+
+// 设置路线标记状态（循环：0 -> 1 -> 2 -> 0）
+function setRouteMarkStatus(routeName) {
+    const routeMarks = JSON.parse(localStorage.getItem('routeMarkStatus') || '{}');
+    const currentStatus = routeMarks[routeName] || 0;
+    const newStatus = (currentStatus + 1) % 3;
+    routeMarks[routeName] = newStatus;
+    localStorage.setItem('routeMarkStatus', JSON.stringify(routeMarks));
+    return newStatus;
 }
 
 // 切换路线标记状态
 function toggleRouteMark(routeName) {
-    const markedRoutes = JSON.parse(localStorage.getItem('markedRoutes') || '[]');
-    const index = markedRoutes.indexOf(routeName);
+    const newStatus = setRouteMarkStatus(routeName);
     
-    if (index > -1) {
-        // 已标记，取消标记
-        markedRoutes.splice(index, 1);
-    } else {
-        // 未标记，添加标记
-        markedRoutes.push(routeName);
+    // 检查是否在路线详情页面
+    const detailMarkBtn = document.getElementById('detail-mark-btn');
+    if (detailMarkBtn) {
+        const buttonTexts = ['有待来日', '心向往之', '已然相逢'];
+        detailMarkBtn.textContent = buttonTexts[newStatus];
+        return;
     }
     
-    localStorage.setItem('markedRoutes', JSON.stringify(markedRoutes));
+    // 检查是否在筛选页面
+    const filteredList = document.getElementById('filtered-routes');
+    if (filteredList) {
+        // 重新应用筛选
+        filterRoutes();
+        return;
+    }
     
     // 重新渲染路线列表
     renderRouteList();
+    
+    // 检查当前是否有激活的筛选按钮
+    const activeButton = document.querySelector('#filter-all, #filter-pending, #filter-desired, #filter-met');
+    if (activeButton) {
+        // 重新应用当前筛选
+        if (activeButton.id === 'filter-all') {
+            filterRoutesByMark('all');
+        } else if (activeButton.id === 'filter-pending') {
+            filterRoutesByMark('pending');
+        } else if (activeButton.id === 'filter-desired') {
+            filterRoutesByMark('desired');
+        } else if (activeButton.id === 'filter-met') {
+            filterRoutesByMark('met');
+        }
+    }
 }
 
 // 创建路线详情HTML
 function createRouteDetailHTML(route) {
     // 使用本地图片
     const imageUrl = getRouteImage(route['名称']);
+    const markStatus = getRouteMarkStatus(route['名称']);
+    const buttonTexts = ['有待来日', '心向往之', '已然相逢'];
+    const buttonText = buttonTexts[markStatus];
     
     let html = `
         <div style="text-align: center; margin-bottom: 2rem; display: flex; justify-content: center; align-items: center;">
             <img src="${imageUrl}" alt="${route['名称']}" style="max-width: 100%; max-height: 600px; object-fit: contain; border-radius: 10px;" onerror="this.src='pic.png';">
         </div>
-        <h2>${route['名称']}</h2>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+            <h2>${route['名称']}</h2>
+            <button class="btn" id="detail-mark-btn" onclick="toggleRouteMark('${route['名称']}')">${buttonText}</button>
+        </div>
         <div class="route-detail-meta">
             <div style="display: flex; gap: 1rem; margin-bottom: 1rem; grid-column: 1 / -1;">
                 <div style="flex: 0.8;"><strong>所在区域:</strong> ${route['所在区域']}</div>
