@@ -165,7 +165,7 @@ function renderHomePage() {
         // 直接选择指定的三条路线作为特色路线
         const featuredRouteNames = ['银山塔林', '东指壶', '藤萝谷'];
         
-        // 更新特色路线的标记按钮文本
+        // 更新特色路线的标记按钮文本和图片
         setTimeout(() => {
             featuredRouteNames.forEach(routeName => {
                 const markStatus = getRouteMarkStatus(routeName);
@@ -176,6 +176,13 @@ function renderHomePage() {
                 const btn = document.getElementById(`featured-btn-${routeName}`);
                 if (btn) {
                     btn.textContent = buttonText;
+                }
+                
+                // 查找对应的图片元素并更新图片
+                const img = document.getElementById(`featured-img-${routeName}`);
+                if (img) {
+                    const imageUrl = getRouteImage(routeName);
+                    img.style.backgroundImage = `url('${imageUrl}')`;
                 }
             });
         }, 100);
