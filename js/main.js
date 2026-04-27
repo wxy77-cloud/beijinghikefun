@@ -582,6 +582,7 @@ function createRouteDetailHTML(route) {
             <h2>${route['名称']}</h2>
             <button class="btn" id="detail-mark-btn" onclick="toggleRouteMark('${route['名称']}')">${buttonText}</button>
         </div>
+        
         <div class="route-detail-meta">
             <div style="display: flex; gap: 1rem; margin-bottom: 1rem; grid-column: 1 / -1;">
                 <div style="flex: 0.8;"><strong>所在区域:</strong> ${route['所在区域']}</div>
@@ -673,6 +674,99 @@ function createRouteDetailHTML(route) {
             <div class="route-detail-section">
                 <h3>路线特色</h3>
                 <p>${route['路线特色']}</p>
+            </div>
+        `;
+    }
+    
+    // 交通信息
+    if (route['自驾信息'] || route['公交地铁信息']) {
+        html += `
+            <div class="route-detail-section">
+                <h3>交通信息</h3>
+        `;
+        
+        if (route['自驾信息']) {
+            html += `
+                <p><strong>自驾：</strong>${route['自驾信息']}</p>
+            `;
+        }
+        
+        if (route['公交地铁信息']) {
+            html += `
+                <p><strong>公交地铁：</strong>${route['公交地铁信息']}</p>
+            `;
+        }
+        
+        html += `
+            </div>
+        `;
+    }
+    
+    // 实用信息
+    if (route['补给点'] || route['卫生间']) {
+        html += `
+            <div class="route-detail-section">
+                <h3>实用信息</h3>
+        `;
+        
+        if (route['补给点']) {
+            html += `
+                <p><strong>补给点：</strong>${route['补给点']}</p>
+            `;
+        }
+        
+        if (route['卫生间']) {
+            html += `
+                <p><strong>卫生间：</strong>${route['卫生间']}</p>
+            `;
+        }
+        
+        if (route['手机信号']) {
+            html += `
+                <p><strong>手机信号：</strong>${route['手机信号']}</p>
+            `;
+        }
+        
+        html += `
+            </div>
+        `;
+    }
+    
+    // 可参考路线
+    if (route['路线1'] || route['路线2'] || route['路线3']) {
+        html += `
+            <div class="route-detail-section">
+                <h3>可参考路线</h3>
+        `;
+        
+        if (route['路线1']) {
+            html += `
+                <div style="margin-bottom: 1rem;">
+                    <p><strong>路线1：</strong>${route['路线1']}</p>
+                    ${route['路线1特色'] ? `<p><strong>特色：</strong>${route['路线1特色']}</p>` : ''}
+                </div>
+            `;
+        }
+        
+        if (route['路线2']) {
+            html += `
+                <div style="margin-bottom: 1rem;">
+                    <p><strong>路线2：</strong>${route['路线2']}</p>
+                    ${route['路线2特色'] ? `<p><strong>特色：</strong>${route['路线2特色']}</p>` : ''}
+                </div>
+            `;
+        }
+        
+        if (route['路线3']) {
+            html += `
+                <div style="margin-bottom: 1rem;">
+                    <p><strong>路线3：</strong>${route['路线3']}</p>
+                    ${route['路线3特色'] ? `<p><strong>特色：</strong>${route['路线3特色']}</p>` : ''}
+                </div>
+            `;
+        }
+        
+        html += `
             </div>
         `;
     }
